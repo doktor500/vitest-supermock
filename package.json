@@ -1,0 +1,51 @@
+{
+  "name": "vitest-supermock",
+  "version": "0.1.0",
+  "description": "Mock a module in Vitest from a regular import: const routerMock = mockModule(router). A Vite plugin hoists the vi.mock call for you.",
+  "keywords": ["vitest", "mock", "mocking", "vi.mock", "vite-plugin", "testing", "vitest-mock-extended"],
+  "license": "MIT",
+  "author": "David Molinero",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doktor500/vitest-supermock.git"
+  },
+  "homepage": "https://github.com/doktor500/vitest-supermock#readme",
+  "bugs": "https://github.com/doktor500/vitest-supermock/issues",
+  "type": "module",
+  "sideEffects": false,
+  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./plugin": {
+      "types": "./dist/plugin.d.ts",
+      "import": "./dist/plugin.js",
+      "default": "./dist/plugin.js"
+    }
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm typecheck && pnpm test && pnpm build"
+  },
+  "peerDependencies": {
+    "vitest": ">=4.0.0"
+  },
+  "dependencies": {
+    "vitest-mock-extended": "^5.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "typescript": "^5",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "packageManager": "pnpm@12.15.0"
+}
