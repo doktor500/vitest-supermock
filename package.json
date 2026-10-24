@@ -1,8 +1,16 @@
 {
   "name": "vitest-supermock",
-  "version": "0.1.0",
-  "description": "Mock a module in Vitest from a regular import: const routerMock = mockModule(router). A Vite plugin hoists the vi.mock call for you.",
-  "keywords": ["vitest", "mock", "mocking", "vi.mock", "vite-plugin", "testing", "vitest-mock-extended"],
+  "version": "0.2.0",
+  "description": "Mock a module in Vitest from a regular import: const routerMock = supermock(router). A Vite plugin hoists the vi.mock call for you.",
+  "keywords": [
+    "vitest",
+    "mock",
+    "mocking",
+    "vi.mock",
+    "vite-plugin",
+    "testing",
+    "vitest-mock-extended"
+  ],
   "license": "MIT",
   "author": "David Molinero",
   "repository": {
@@ -13,7 +21,9 @@
   "bugs": "https://github.com/doktor500/vitest-supermock/issues",
   "type": "module",
   "sideEffects": false,
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

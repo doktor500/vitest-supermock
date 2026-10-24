@@ -1,13 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
-import { mockModule } from "vitest-supermock";
+import { supermock } from "vitest-supermock";
 
 import { farewell, greeter } from "./fixtures/greeter";
 import { isFormal, leave, welcome } from "./fixtures/service";
 
-const greeterMock = mockModule(greeter);
-const farewellMock = mockModule(farewell);
+const greeterMock = supermock(greeter);
+const farewellMock = supermock(farewell);
 
-describe("mockModule", () => {
+describe("supermock", () => {
   it("hands back the import itself, already replaced by the plugin", () => {
     expect(greeterMock).toBe(greeter);
     expect(farewellMock).toBe(farewell);
@@ -48,8 +48,8 @@ describe("mockModule", () => {
   });
 
   it("throws for a value the plugin did not mock", () => {
-    // A direct `mockModule(...)` call would be rewritten by the plugin; an alias is not.
-    const typed = mockModule;
+    // A direct `supermock(...)` call would be rewritten by the plugin; an alias is not.
+    const typed = supermock;
 
     expect(() => typed({ greet: () => "" })).toThrow(/not mocked/);
   });

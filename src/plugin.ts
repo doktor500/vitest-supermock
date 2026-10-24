@@ -1,14 +1,14 @@
 import type { Plugin } from "vitest/config";
 
 const PACKAGE = "vitest-supermock";
-const HELPER = "mockModule";
+const HELPER = "supermock";
 const FACTORY = "mockAllExports";
 
 type Node = { type: string; [key: string]: unknown };
 type Parse = (code: string) => unknown;
 
 /**
- * Rewrites a test file so that each `mockModule(binding)` mocks the module `binding` was imported from.
+ * Rewrites a test file so that each `supermock(binding)` mocks the module `binding` was imported from.
  * Returns `undefined` when the file has nothing to rewrite.
  *
  * Vitest only hoists `vi.mock` / `vitest.mock` calls above the imports of a file. For every call this
@@ -66,8 +66,8 @@ export const transform = (code: string, id: string, parse: Parse): string | unde
   return `${code}${code.endsWith("\n") ? "" : "\n"}${appended.join("\n")}\n`;
 };
 
-/** Vite plugin that makes `mockModule(binding)` from "vitest-supermock" work. Add it to `plugins` in your Vitest config. */
-export const supermock = (): Plugin => ({
+/** Vite plugin that makes `supermock(binding)` from "vitest-supermock" work. Add it to `plugins` in your Vitest config. */
+export const supermockPlugin = (): Plugin => ({
   name: PACKAGE,
   transform(code, id) {
     if (id.includes("/node_modules/")) return;

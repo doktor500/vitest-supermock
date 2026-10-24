@@ -10,11 +10,11 @@ const lines = (...sourceLines: string[]) => `${sourceLines.join("\n")}\n`;
 describe("transform", () => {
   it("appends a hoistable vitest.mock for the module each binding was imported from", () => {
     const code = lines(
-      'import { mockModule } from "vitest-supermock";',
+      'import { supermock } from "vitest-supermock";',
       'import { router } from "./router";',
       'import { users } from "@/users";',
-      "const routerMock = mockModule(router);",
-      "const usersMock = mockModule(users);",
+      "const routerMock = supermock(router);",
+      "const usersMock = supermock(users);",
     );
 
     expect(run(code)).toBe(
@@ -29,10 +29,10 @@ describe("transform", () => {
 
   it("mocks a module once when several of its exports are passed", () => {
     const code = lines(
-      'import { mockModule } from "vitest-supermock";',
+      'import { supermock } from "vitest-supermock";',
       'import { save, load } from "./storage";',
-      "mockModule(save);",
-      "mockModule(load);",
+      "supermock(save);",
+      "supermock(load);",
     );
 
     expect(run(code)?.match(/vitest\.mock\(/g)).toHaveLength(1);
@@ -41,9 +41,9 @@ describe("transform", () => {
   it("reuses `vi` when the file already imports it from vitest", () => {
     const code = lines(
       'import { vi } from "vitest";',
-      'import { mockModule } from "vitest-supermock";',
+      'import { supermock } from "vitest-supermock";',
       'import { router } from "./router";',
-      "mockModule(router);",
+      "supermock(router);",
     );
 
     expect(run(code)).toBe(
@@ -51,9 +51,9 @@ describe("transform", () => {
     );
   });
 
-  it("follows an import alias of mockModule", () => {
+  it("follows an import alias of supermock", () => {
     const code = lines(
-      'import { mockModule as mocked } from "vitest-supermock";',
+      'import { supermock as mocked } from "vitest-supermock";',
       'import { router } from "./router";',
       "mocked(router);",
     );
@@ -63,33 +63,33 @@ describe("transform", () => {
 
   it("supports default and namespace imports", () => {
     const code = lines(
-      'import { mockModule } from "vitest-supermock";',
+      'import { supermock } from "vitest-supermock";',
       'import config from "./config";',
       'import * as api from "./api";',
-      "mockModule(config);",
-      "mockModule(api);",
+      "supermock(config);",
+      "supermock(api);",
     );
 
     expect(run(code)).toContain('vitest.mock("./config"');
     expect(run(code)).toContain('vitest.mock("./api"');
   });
 
-  it("leaves files alone that do not import mockModule from vitest-supermock", () => {
+  it("leaves files alone that do not import supermock from vitest-supermock", () => {
     expect(run(lines('import { router } from "./router";', "router.navigateTo();"))).toBeUndefined();
-    expect(run(lines('import { mockModule } from "./helpers";', "mockModule(router);"))).toBeUndefined();
+    expect(run(lines('import { supermock } from "./helpers";', "supermock(router);"))).toBeUndefined();
   });
 
-  it("leaves files alone that import mockModule but never call it", () => {
-    expect(run(lines('import { mockModule } from "vitest-supermock";', 'console.log("mockModule(");'))).toBeUndefined();
+  it("leaves files alone that import supermock but never call it", () => {
+    expect(run(lines('import { supermock } from "vitest-supermock";', 'console.log("supermock(");'))).toBeUndefined();
   });
 
   it("rejects an argument that is not an import binding", () => {
     const code = lines(
-      'import { mockModule } from "vitest-supermock";',
+      'import { supermock } from "vitest-supermock";',
       "const router = { navigateTo: () => {} };",
-      "mockModule(router);",
+      "supermock(router);",
     );
 
-    expect(() => run(code)).toThrow(`mockModule() only accepts a binding from an import statement, e.g. mockModule(router). Check ${FILE}`);
+    expect(() => run(code)).toThrow(`supermock() only accepts a binding from an import statement, e.g. supermock(router). Check ${FILE}`);
   });
 });

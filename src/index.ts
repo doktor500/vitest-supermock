@@ -1,7 +1,7 @@
 import { mockDeep, mockFn, type CalledWithMock, type DeepMockProxy } from "vitest-mock-extended";
 
 /**
- * What `mockModule()` returns. A function export gains the mock function API of vitest-mock-extended;
+ * What `supermock()` returns. A function export gains the mock function API of vitest-mock-extended;
  * an object export becomes a deep mock whose members are mocked on first access.
  */
 export type Mocked<Exported> = Exported extends (...args: infer Args) => infer Result
@@ -46,7 +46,7 @@ const mockExport = (): object => {
 
 /**
  * Builds a module namespace whose exports are mocked on first access. The plugin passes this as the
- * `vi.mock` factory for every module you call `mockModule()` on; you normally never call it yourself.
+ * `vi.mock` factory for every module you call `supermock()` on; you normally never call it yourself.
  */
 export const mockAllExports = (): Record<string, unknown> => {
   const exports: Record<string, object> = {};
@@ -62,10 +62,10 @@ export const mockAllExports = (): Record<string, unknown> => {
  * Returns `exported` typed as its mock. The plugin has already replaced the module it was imported from,
  * so at runtime the import is the mock. This narrows the type and fails loudly if the plugin did not run.
  */
-export const mockModule = <Exported>(exported: Exported): Mocked<Exported> => {
+export const supermock = <Exported>(exported: Exported): Mocked<Exported> => {
   if (!installed.has(exported as object)) {
     throw new Error(
-      "mockModule(): this value is not mocked. Pass a binding from an import statement and add supermock() " +
+      "supermock(): this value is not mocked. Pass a binding from an import statement and add supermockPlugin() " +
         'from "vitest-supermock/plugin" to the plugins of your Vitest config.',
     );
   }
